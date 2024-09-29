@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	dbConection "api_pattern_go/api/database/conection"
+	"api_pattern_go/api/routes"
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	fmt.Println("Hello World")
+	dbConection.ConnectDatabase()
+
+	router := gin.Default()
+	routes.SetupRoutes(router)
+
+	router.Run(":8080")
 }
