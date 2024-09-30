@@ -1,33 +1,47 @@
 package conection
 
 import (
-	"github.com/joho/godotenv"
+	"api_pattern_go/api/global"
+	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
 	"os"
 )
 
-var DB *gorm.DB
+var (
+	DB  *gorm.DB
+	err error
+)
 
 func ConnectDatabase() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file")
+	DB, err = gorm.Open(postgres.Open(getStringConection()), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Could not connect to database: %v", err)
 	}
+	log.Println("Connected to database")
+}
 
-	dsn := "host=" + os.Getenv("DB_HOST") +
+func MakeMigrations() {
+	if err = DB.AutoMigrate(global.GetModelsList()); err != nil {
+		log.Fatalf("Could not migrate: %v", err)
+	}
+}
+
+func getStringConection() string {
+	dns := "host=" + os.Getenv("DB_HOST") +
 		" user=" + os.Getenv("DB_USER") +
 		" password=" + os.Getenv("DB_PASSWORD") +
 		" dbname=" + os.Getenv("DB_NAME") +
 		" port=" + os.Getenv("DB_PORT") +
 		" sslmode=disable"
+	return dns
+}
 
-	var err error
-
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+func GetConnection() (*gorm.DB, error) {
+	DB, err = gorm.Open(postgres.Open(getStringConection()), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Could not connect to database: %v", err)
+		return DB, fmt.Errorf("Could not connect to database: %v", err)
 	}
-
-	log.Println("Connected to database")
+	return DB, nil
 }
