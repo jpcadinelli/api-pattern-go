@@ -23,7 +23,7 @@ func ConnectDatabase() {
 }
 
 func MakeMigrations() {
-	if err = DB.AutoMigrate(global.GetModelsList()); err != nil {
+	if err = DB.AutoMigrate(global.GetModelsList()...); err != nil {
 		log.Fatalf("Could not migrate: %v", err)
 	}
 }
