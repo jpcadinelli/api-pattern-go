@@ -8,17 +8,17 @@ import (
 )
 
 func Criar(ginctx *gin.Context) {
-	var user models.Teste
-	if err := ginctx.ShouldBindJSON(&user); err != nil {
+	var test models.Teste
+	if err := ginctx.ShouldBindJSON(&test); err != nil {
 		ginctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	dbConetion.DB.Create(&user)
-	ginctx.JSON(http.StatusCreated, user)
+	dbConetion.DB.Create(&test)
+	ginctx.JSON(http.StatusCreated, test)
 }
 
 func Visualizar(ginctx *gin.Context) {
-	var users []models.Teste
-	dbConetion.DB.Find(&users)
-	ginctx.JSON(http.StatusOK, users)
+	var tests []models.Teste
+	dbConetion.DB.Find(&tests)
+	ginctx.JSON(http.StatusOK, tests)
 }
