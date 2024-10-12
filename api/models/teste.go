@@ -1,8 +1,16 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 type Teste struct {
-	Id   uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
+	Id   uuid.UUID `json:"id" gorm:"type:uuid;primaryKey"`
 	Nome string    `json:"nome"`
+}
+
+func (t *Teste) BeforeCreate(_ *gorm.DB) (err error) {
+	t.Id = uuid.New()
+	return nil
 }
