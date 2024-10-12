@@ -17,7 +17,7 @@ func Criar(ginctx *gin.Context) {
 	ginctx.JSON(http.StatusCreated, test)
 }
 
-func Visualizar(ginctx *gin.Context) {
+func Listar(ginctx *gin.Context) {
 	var tests []models.Teste
 	dbConetion.DB.Find(&tests)
 	ginctx.JSON(http.StatusOK, tests)
