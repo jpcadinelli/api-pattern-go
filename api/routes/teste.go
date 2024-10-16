@@ -16,4 +16,5 @@ func testeRoutes(r *gin.Engine) {
 	r.GET(testesId, teste.Visualizar)
 	r.GET(testesFiltro, teste.Listar)
 	r.PUT(testes, teste.Atualizar)
+	r.DELETE(testesId, teste.Deletar)
 }

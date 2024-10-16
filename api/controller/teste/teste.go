@@ -93,3 +93,19 @@ func Atualizar(ginctx *gin.Context) {
 
 	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, tOld))
 }
+
+func Deletar(ginctx *gin.Context) {
+	id := ginctx.Param("id")
+
+	tx := dbConetion.DB.Where(queryConditionId, id).Delete(&models.Teste{})
+	if tx.Error != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(tx.Error, nil))
+		return
+	}
+	if tx.RowsAffected == 0 {
+		ginctx.JSON(http.StatusNotFound, middleware.NewResponseBridge(nil, nil))
+		return
+	}
+
+	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, nil))
+}
