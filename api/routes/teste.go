@@ -13,5 +13,6 @@ const (
 
 func testeRoutes(r *gin.Engine) {
 	r.POST(testes, teste.Criar)
+	r.GET(testesId, teste.Visualizar)
 	r.GET(testesFiltro, teste.Listar)
 }
