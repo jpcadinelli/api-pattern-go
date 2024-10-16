@@ -49,9 +49,23 @@ func Visualizar(ginctx *gin.Context) {
 }
 
 func Listar(ginctx *gin.Context) {
-	var testes []models.Teste
+	var (
+		testes []models.Teste
+		filtro models.TesteFiltro
+	)
 
-	tx := dbConetion.DB.Find(&testes)
+	if err := ginctx.ShouldBindJSON(&filtro); err != nil {
+		ginctx.JSON(http.StatusBadRequest, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	tx := dbConetion.DB
+
+	if filtro.Nome != "" {
+		tx = tx.Where("nome LIKE ?", "%"+filtro.Nome+"%")
+	}
+
+	tx.Find(&testes)
 	if tx.Error != nil {
 		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(tx.Error, nil))
 		return

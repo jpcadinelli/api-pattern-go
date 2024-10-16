@@ -14,3 +14,7 @@ func (t *Teste) BeforeCreate(_ *gorm.DB) (err error) {
 	t.Id = uuid.New()
 	return nil
 }
+
+type TesteFiltro struct {
+	Nome string `json:"nome"`
+}
