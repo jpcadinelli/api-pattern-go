@@ -12,7 +12,7 @@ type Teste struct {
 
 func (t *Teste) BeforeCreate(_ *gorm.DB) (err error) {
 	t.Id = uuid.New()
-	return nil
+	return err
 }
 
 type TesteFiltro struct {

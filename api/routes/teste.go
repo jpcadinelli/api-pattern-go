@@ -6,12 +6,12 @@ import (
 )
 
 const (
-	testes       = "/testes"
-	testesId     = "/testes/:id"
-	testesFiltro = "/testes/filtro"
+	testes       = "/"
+	testesId     = "/:id"
+	testesFiltro = "/filtro"
 )
 
-func testeRoutes(r *gin.Engine) {
+func testeRoutes(r *gin.RouterGroup) {
 	r.POST(testes, teste.Criar)
 	r.GET(testesId, teste.Visualizar)
 	r.POST(testesFiltro, teste.Listar)

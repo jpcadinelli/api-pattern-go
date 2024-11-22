@@ -28,6 +28,9 @@ func iniciaConfigBanco() {
 
 func iniciaRotasAPI() {
 	router := gin.Default()
-	routes.SetupRoutes(router)
-	router.Run(":8080")
+	router = routes.SetupRoutes(router)
+	err := router.Run(":8080")
+	if err != nil {
+		return
+	}
 }
