@@ -5,16 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	users       = "/"
-	usersId     = "/:id"
-	usersFiltro = "/filtro"
-)
-
 func userRoutes(r *gin.RouterGroup) {
-	r.POST(users, user.Criar)
-	r.GET(usersId, user.Visualizar)
-	r.POST(usersFiltro, user.Listar)
-	r.PUT(users, user.Atualizar)
-	r.DELETE(usersId, user.Deletar)
+	r.POST(route, user.Criar)
+	r.GET(routeId, user.Visualizar)
+	r.POST(routeFiltro, user.Listar)
+	r.PUT(route, user.Atualizar)
+	r.DELETE(routeId, user.Deletar)
 }

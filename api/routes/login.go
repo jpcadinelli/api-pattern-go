@@ -5,10 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	logins = "/"
-)
-
 func loginRoutes(r *gin.RouterGroup) {
-	r.POST(logins, login.Login)
+	r.POST(route, login.Login)
 }
