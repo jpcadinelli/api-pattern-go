@@ -23,7 +23,10 @@ func carregaDadosIniciais() {
 
 func iniciaConfigBanco() {
 	dbConection.ConnectDatabase()
-	dbConection.MakeMigrations()
+	err := dbConection.RunMigrations()
+	if err != nil {
+		return
+	}
 }
 
 func iniciaRotasAPI() {
