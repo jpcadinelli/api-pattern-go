@@ -22,3 +22,25 @@ func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
 	u.CreatedAt = time.Now()
 	return err
 }
+
+type UserDTOResponse struct {
+	Id             uuid.UUID `json:"id"`
+	PrimeiroNome   string    `json:"primeiroNome" validate:"required"`
+	UltimoNome     string    `json:"ultimoNome" validate:"required"`
+	CPF            string    `json:"cpf" validate:"required"`
+	Email          string    `json:"email" validate:"required"`
+	DataNascimento time.Time `json:"dataNascimento" validate:"required"`
+	CreatedAt      time.Time `json:"createdAt"`
+}
+
+func (u *User) UserToDTOResponse() *UserDTOResponse {
+	return &UserDTOResponse{
+		Id:             u.Id,
+		PrimeiroNome:   u.PrimeiroNome,
+		UltimoNome:     u.UltimoNome,
+		CPF:            u.CPF,
+		Email:          u.Email,
+		DataNascimento: u.DataNascimento,
+		CreatedAt:      u.CreatedAt,
+	}
+}

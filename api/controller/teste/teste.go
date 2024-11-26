@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-var (
+const (
 	queryConditionId = "id = ?"
 )
 
