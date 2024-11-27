@@ -1,6 +1,6 @@
 package global
 
 const (
-	TableTeste = "teste"
-	TableUser  = "users"
+	TableTeste   = "teste"
+	TableUsuario = "usuario"
 )

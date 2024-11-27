@@ -55,3 +55,23 @@ func (s *JWTService) ValidateToken(token string) bool {
 
 	return err == nil
 }
+
+func (s *JWTService) GetUserId(token string) (uuid.UUID, error) {
+	parsedToken, err := jwt.ParseWithClaims(token, &Claims{}, func(t *jwt.Token) (interface{}, error) {
+		if _, isValid := t.Method.(*jwt.SigningMethodHMAC); !isValid {
+			return nil, fmt.Errorf("invalid signing method")
+		}
+
+		return []byte(s.secretKey), nil
+	})
+
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("failed to parse token: %v", err)
+	}
+
+	if claims, ok := parsedToken.Claims.(*Claims); ok && parsedToken.Valid {
+		return claims.Sum, nil
+	}
+
+	return uuid.Nil, fmt.Errorf("invalid token or claims")
+}

@@ -26,6 +26,10 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 		{
 			loginRoutes(loginGroup)
 		}
+		permissaoGroup := main.Group("/permissoes", middleware.Auth())
+		{
+			permissaoRoutes(permissaoGroup)
+		}
 	}
 
 	return router
