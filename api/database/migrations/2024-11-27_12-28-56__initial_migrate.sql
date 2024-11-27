@@ -44,8 +44,8 @@ CREATE TABLE permissao_usuario (
     id_permissao UUID,
     id_usuario UUID,
         CONSTRAINT pk_permissao_usuario PRIMARY KEY (id),
-        CONSTRAINT fk_permissao_usuario_permissao FOREIGN KEY (id_permissao) REFERENCES usuario(id),
-        CONSTRAINT fk_permissao_usuario_usuario FOREIGN KEY (id_usuario) REFERENCES permissao(id)
+        CONSTRAINT fk_permissao_usuario_permissao FOREIGN KEY (id_permissao) REFERENCES permissao(id),
+        CONSTRAINT fk_permissao_usuario_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 );
 
 COMMENT ON COLUMN permissao_usuario.id IS 'Identificador único da tabela permissao_usuario';
@@ -65,7 +65,7 @@ INSERT INTO usuario(id, primeiro_nome, ultimo_nome, cpf, email, password, data_n
             'Admin',
             'do Sistema',
             12345678909,
-            admin_d@_sistema.com,
+            'admin_d@_sistema.com',
             '1bb6e3a85ddd637bddad86d6a5b5ee5252fb1bf1d8a3134ef6ee03ca295fce1c',
             '0001-01-01',
             CURRENT_TIMESTAMP
