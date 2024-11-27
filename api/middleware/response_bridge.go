@@ -1,13 +1,19 @@
 package middleware
 
+import "fmt"
+
 type ResponseBridge struct {
-	Error error `json:"error"`
-	Data  any   `json:"data"`
+	Error string `json:"error"`
+	Data  any    `json:"data"`
 }
 
 func NewResponseBridge(err error, data any) *ResponseBridge {
+	var errStr string
+	if err != nil {
+		errStr = fmt.Sprintf("%s", err)
+	}
 	return &ResponseBridge{
-		Error: err,
+		Error: errStr,
 		Data:  data,
 	}
 }
