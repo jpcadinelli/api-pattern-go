@@ -1,6 +1,7 @@
 package models
 
 import (
+	"api_pattern_go/api/global"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"time"
@@ -21,6 +22,10 @@ func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
 	u.Id = uuid.New()
 	u.CreatedAt = time.Now()
 	return err
+}
+
+func (User) TableName() string {
+	return global.TableUser
 }
 
 type UserDTOResponse struct {

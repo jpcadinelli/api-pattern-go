@@ -1,6 +1,7 @@
 package models
 
 import (
+	"api_pattern_go/api/global"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -13,6 +14,10 @@ type Teste struct {
 func (t *Teste) BeforeCreate(_ *gorm.DB) (err error) {
 	t.Id = uuid.New()
 	return err
+}
+
+func (Teste) TableName() string {
+	return global.TableTeste
 }
 
 type TesteFiltro struct {
