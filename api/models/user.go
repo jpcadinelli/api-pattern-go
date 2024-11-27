@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type User struct {
+type Usuario struct {
 	Id             uuid.UUID `json:"id"`
 	PrimeiroNome   string    `json:"primeiroNome" validate:"required"`
 	UltimoNome     string    `json:"ultimoNome" validate:"required"`
@@ -18,17 +18,17 @@ type User struct {
 	CreatedAt      time.Time `json:"createdAt"`
 }
 
-func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
+func (u *Usuario) BeforeCreate(_ *gorm.DB) (err error) {
 	u.Id = uuid.New()
 	u.CreatedAt = time.Now()
 	return err
 }
 
-func (User) TableName() string {
-	return global.TableUser
+func (Usuario) TableName() string {
+	return global.TableUsuario
 }
 
-type UserDTOResponse struct {
+type UsuarioDTOResponse struct {
 	Id             uuid.UUID `json:"id"`
 	PrimeiroNome   string    `json:"primeiroNome" validate:"required"`
 	UltimoNome     string    `json:"ultimoNome" validate:"required"`
@@ -38,8 +38,8 @@ type UserDTOResponse struct {
 	CreatedAt      time.Time `json:"createdAt"`
 }
 
-func (u *User) UserToDTOResponse() *UserDTOResponse {
-	return &UserDTOResponse{
+func (u *Usuario) UsuarioToDTOResponse() *UsuarioDTOResponse {
+	return &UsuarioDTOResponse{
 		Id:             u.Id,
 		PrimeiroNome:   u.PrimeiroNome,
 		UltimoNome:     u.UltimoNome,

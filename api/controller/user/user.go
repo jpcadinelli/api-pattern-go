@@ -15,7 +15,7 @@ const (
 )
 
 func Criar(ginctx *gin.Context) {
-	var u models.User
+	var u models.Usuario
 
 	if err := ginctx.ShouldBindJSON(&u); err != nil {
 		ginctx.JSON(http.StatusBadRequest, middleware.NewResponseBridge(err, nil))
@@ -30,12 +30,12 @@ func Criar(ginctx *gin.Context) {
 		return
 	}
 
-	userResponse := u.UserToDTOResponse()
+	userResponse := u.UsuarioToDTOResponse()
 	ginctx.JSON(http.StatusCreated, middleware.NewResponseBridge(nil, userResponse))
 }
 
 func Visualizar(ginctx *gin.Context) {
-	var u models.User
+	var u models.Usuario
 
 	idStr := ginctx.Param("id")
 	id, err := uuid.Parse(idStr)
@@ -54,7 +54,7 @@ func Visualizar(ginctx *gin.Context) {
 		return
 	}
 
-	userResponse := u.UserToDTOResponse()
+	userResponse := u.UsuarioToDTOResponse()
 	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, userResponse))
 }
 

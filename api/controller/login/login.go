@@ -18,7 +18,7 @@ func Login(ginctx *gin.Context) {
 		return
 	}
 
-	var user models.User
+	var user models.Usuario
 	tx := dbConection.DB.Where("email = ?", l.Email).First(&user)
 	if tx.Error != nil {
 		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(erros.ErrUsuarioNaoEncontrado, nil))
