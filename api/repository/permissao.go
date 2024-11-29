@@ -11,7 +11,7 @@ type PermissaoRepository interface {
 	FindById(id uuid.UUID, preloads ...string) (*models.Permissao, error)
 	FindAll() ([]models.Permissao, error)
 	Create(permissao *models.Permissao) error
-	Update(permissao *models.Permissao) error
+	Update(permissao *models.Permissao, updateItems map[string]interface{}) (*models.Permissao, error)
 	Delete(id uuid.UUID) error
 }
 
@@ -62,8 +62,16 @@ func (r *permissaoRepositoryImpl) Create(permissao *models.Permissao) error {
 	return r.db.Create(permissao).Error
 }
 
-func (r *permissaoRepositoryImpl) Update(permissao *models.Permissao) error {
-	return r.db.Save(permissao).Error
+func (r *permissaoRepositoryImpl) Update(permissao *models.Permissao, updateItems map[string]interface{}) (*models.Permissao, error) {
+	tx := r.db.Model(permissao).Updates(updateItems)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return nil, erros.ErrPermissaoNaoEncontrada
+	}
+
+	return permissao, nil
 }
 
 func (r *permissaoRepositoryImpl) Delete(id uuid.UUID) error {
