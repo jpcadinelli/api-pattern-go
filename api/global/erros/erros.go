@@ -16,5 +16,9 @@ var (
 )
 
 var (
+	ErrPermissaoNaoEncontrada = fmt.Errorf("permissão não encontrado")
+)
+
+var (
 	ErrUsuarioNaoTemPermissao = fmt.Errorf("usuário não tem permissão")
 )
