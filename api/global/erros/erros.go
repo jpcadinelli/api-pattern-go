@@ -11,6 +11,10 @@ var (
 )
 
 var (
-	ErrUsuarioNaoEncontrado = fmt.Errorf("user not found")
-	ErrCredenciaisInvalidas = fmt.Errorf("invalid user credentials")
+	ErrUsuarioNaoEncontrado = fmt.Errorf("usuário não encontrado")
+	ErrCredenciaisInvalidas = fmt.Errorf("credenciais inválidas do usuário")
+)
+
+var (
+	ErrUsuarioNaoTemPermissao = fmt.Errorf("usuário não tem permissão")
 )
