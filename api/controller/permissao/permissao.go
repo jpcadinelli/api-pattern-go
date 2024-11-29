@@ -68,8 +68,17 @@ func Visualizar(ginctx *gin.Context) {
 	ginctx.JSON(http.StatusCreated, middleware.NewResponseBridge(nil, p))
 }
 
-func Listar(_ *gin.Context) {
-	return
+func Listar(ginctx *gin.Context) {
+	usuarioLogado, err := service.GetUsuarioLogado(ginctx)
+	if err != nil {
+		ginctx.JSON(http.StatusBadRequest, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	if !service.VerificaPermissaoUsuario(*usuarioLogado, enum.PermissaoPermissaoListar) {
+		ginctx.JSON(http.StatusUnauthorized, middleware.NewResponseBridge(erros.ErrUsuarioNaoTemPermissao, nil))
+		return
+	}
 }
 
 func Atualizar(ginctx *gin.Context) {
