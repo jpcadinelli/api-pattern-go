@@ -15,7 +15,7 @@ type Usuario struct {
 	Email          string      `json:"email" validate:"required"`
 	Password       string      `json:"password" validate:"required"`
 	DataNascimento time.Time   `json:"dataNascimento" validate:"required"`
-	Permissoes     []Permissao `json:"permissoes" gorm:"many2many:permissao_usuario;"`
+	Permissoes     []Permissao `json:"permissoes" gorm:"many2many:permissao_usuario;joinForeignKey:IdUsuario;joinReferences:IdPermissao"`
 	CreatedAt      time.Time   `json:"createdAt"`
 }
 

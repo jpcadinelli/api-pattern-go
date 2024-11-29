@@ -8,7 +8,7 @@ import (
 )
 
 type UsuarioRepository interface {
-	FindById(id uuid.UUID) (*models.Usuario, error)
+	FindById(id uuid.UUID, preloads ...string) (*models.Usuario, error)
 	FindAll() ([]models.Usuario, error)
 	Create(usuario *models.Usuario) error
 	Update(usuario *models.Usuario) error
@@ -23,10 +23,17 @@ func NewUsuarioRepository(db *gorm.DB) UsuarioRepository {
 	return &usuarioRepositoryImpl{db: db}
 }
 
-func (r *usuarioRepositoryImpl) FindById(id uuid.UUID) (*models.Usuario, error) {
+func (r *usuarioRepositoryImpl) FindById(id uuid.UUID, preloads ...string) (*models.Usuario, error) {
 	var usuario models.Usuario
 
-	tx := r.db.First(&usuario, "id = ?", id)
+	tx := r.db
+	if len(preloads) > 0 {
+		for _, preload := range preloads {
+			tx = tx.Preload(preload)
+		}
+	}
+
+	tx = tx.First(&usuario, "id = ?", id)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}

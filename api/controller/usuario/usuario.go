@@ -43,7 +43,7 @@ func Visualizar(ginctx *gin.Context) {
 		return
 	}
 
-	u, err := repository.NewUsuarioRepository(dbConetion.DB).FindById(id)
+	u, err := repository.NewUsuarioRepository(dbConetion.DB).FindById(id, "Permissoes")
 	if err != nil {
 		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
 		return
@@ -98,7 +98,7 @@ func GetUsuarioLogado(ginctx *gin.Context) (*models.UsuarioDTOResponse, error) {
 		return nil, err
 	}
 
-	usuario, err := repository.NewUsuarioRepository(dbConetion.DB).FindById(id)
+	usuario, err := repository.NewUsuarioRepository(dbConetion.DB).FindById(id, "Permissoes")
 	if err != nil {
 		return nil, err
 	}
