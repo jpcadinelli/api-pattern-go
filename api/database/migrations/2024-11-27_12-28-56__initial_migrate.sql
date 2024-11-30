@@ -44,10 +44,36 @@ CREATE TABLE permissao_usuario (
     id_permissao UUID,
     id_usuario UUID,
         CONSTRAINT pk_permissao_usuario PRIMARY KEY (id),
-        CONSTRAINT fk_permissao_usuario_permissao FOREIGN KEY (id_permissao) REFERENCES usuario(id),
-        CONSTRAINT fk_permissao_usuario_usuario FOREIGN KEY (id_usuario) REFERENCES permissao(id)
+        CONSTRAINT fk_permissao_usuario_permissao FOREIGN KEY (id_permissao) REFERENCES permissao(id),
+        CONSTRAINT fk_permissao_usuario_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 );
 
 COMMENT ON COLUMN permissao_usuario.id IS 'Identificador único da tabela permissao_usuario';
 COMMENT ON COLUMN permissao_usuario.id_permissao IS 'Referência para a permissão na tabela permissao';
 COMMENT ON COLUMN permissao_usuario.id_usuario IS 'Referência para o usuário na tabela usuario';
+
+INSERT INTO permissao(id, nome, descricao)
+    VALUES (
+            'b41c91df-96c9-44ef-ac09-8b722ce240f6',
+            'SISTEMA_ADMIN',
+            'Permissão de Admin'
+           );
+
+INSERT INTO usuario(id, primeiro_nome, ultimo_nome, cpf, email, password, data_nascimento, created_at)
+    VALUES (
+            'b272ec99-457d-40b9-9aa3-d4790a33fc0c',
+            'Admin',
+            'do Sistema',
+            12345678909,
+            'admin_d@_sistema.com',
+            '1bb6e3a85ddd637bddad86d6a5b5ee5252fb1bf1d8a3134ef6ee03ca295fce1c',
+            '0001-01-01',
+            CURRENT_TIMESTAMP
+           );
+
+INSERT INTO permissao_usuario(id, id_permissao, id_usuario)
+    VALUES (
+            'af62e143-64e8-416b-a629-5dadd14120f1',
+            'b41c91df-96c9-44ef-ac09-8b722ce240f6',
+            'b272ec99-457d-40b9-9aa3-d4790a33fc0c'
+           );
