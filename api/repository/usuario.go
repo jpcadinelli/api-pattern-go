@@ -9,6 +9,7 @@ import (
 
 type UsuarioRepository interface {
 	FindById(id uuid.UUID, preloads ...string) (*models.Usuario, error)
+	FindByEmail(email string) (*models.Usuario, error)
 	FindAll() ([]models.Usuario, error)
 	Create(usuario *models.Usuario) error
 	Update(usuario *models.Usuario) error
@@ -34,6 +35,20 @@ func (r *usuarioRepositoryImpl) FindById(id uuid.UUID, preloads ...string) (*mod
 	}
 
 	tx = tx.First(&usuario, "id = ?", id)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return nil, erros.ErrUsuarioNaoEncontrado
+	}
+
+	return &usuario, nil
+}
+
+func (r *usuarioRepositoryImpl) FindByEmail(email string) (*models.Usuario, error) {
+	var usuario models.Usuario
+
+	tx := r.db.First(&usuario, "email = ?", email)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
