@@ -10,9 +10,9 @@ import (
 type UsuarioRepository interface {
 	FindById(id uuid.UUID, preloads ...string) (*models.Usuario, error)
 	FindByEmail(email string) (*models.Usuario, error)
-	FindAll() ([]models.Usuario, error)
+	FindAll(preloads ...string) ([]models.Usuario, error)
 	Create(usuario *models.Usuario) error
-	Update(usuario *models.Usuario) error
+	Update(usuario *models.Usuario, updateItems map[string]interface{}) (*models.Usuario, error)
 	Delete(id uuid.UUID) error
 }
 
@@ -59,10 +59,17 @@ func (r *usuarioRepositoryImpl) FindByEmail(email string) (*models.Usuario, erro
 	return &usuario, nil
 }
 
-func (r *usuarioRepositoryImpl) FindAll() ([]models.Usuario, error) {
+func (r *usuarioRepositoryImpl) FindAll(preloads ...string) ([]models.Usuario, error) {
 	var usuarios []models.Usuario
 
-	tx := r.db.Find(&usuarios)
+	tx := r.db
+	if len(preloads) > 0 {
+		for _, preload := range preloads {
+			tx = tx.Preload(preload)
+		}
+	}
+
+	tx = tx.Find(&usuarios)
 	if tx.Error != nil {
 		return usuarios, tx.Error
 	}
@@ -77,10 +84,28 @@ func (r *usuarioRepositoryImpl) Create(usuario *models.Usuario) error {
 	return r.db.Create(usuario).Error
 }
 
-func (r *usuarioRepositoryImpl) Update(usuario *models.Usuario) error {
-	return r.db.Save(usuario).Error
+func (r *usuarioRepositoryImpl) Update(usuario *models.Usuario, updateItems map[string]interface{}) (*models.Usuario, error) {
+	tx := r.db.Model(usuario).Updates(updateItems)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return nil, erros.ErrUsuarioNaoEncontrado
+	}
+
+	return usuario, nil
 }
 
 func (r *usuarioRepositoryImpl) Delete(id uuid.UUID) error {
-	return r.db.Delete(&models.Usuario{}, "id = ?", id).Error
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("id_usuario = ?", id).Delete(&models.PermissaoUsuario{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Delete(&models.Usuario{}, "id = ?", id).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }

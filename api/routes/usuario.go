@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func userRoutes(r *gin.RouterGroup) {
+func usuarioRoutes(r *gin.RouterGroup) {
 	r.POST(route, usuario.Criar)
 	r.GET(routeId, middleware.Auth(), usuario.Visualizar)
 	r.POST(routeFiltro, middleware.Auth(), usuario.Listar)
