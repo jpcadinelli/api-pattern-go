@@ -9,7 +9,7 @@ import (
 
 type PermissaoRepository interface {
 	FindById(id uuid.UUID, preloads ...string) (*models.Permissao, error)
-	FindAll() ([]models.Permissao, error)
+	FindAll(preloads ...string) ([]models.Permissao, error)
 	Create(permissao *models.Permissao) error
 	Update(permissao *models.Permissao, updateItems map[string]interface{}) (*models.Permissao, error)
 	Delete(id uuid.UUID) error
@@ -44,10 +44,17 @@ func (r *permissaoRepositoryImpl) FindById(id uuid.UUID, preloads ...string) (*m
 	return &permissao, nil
 }
 
-func (r *permissaoRepositoryImpl) FindAll() ([]models.Permissao, error) {
+func (r *permissaoRepositoryImpl) FindAll(preloads ...string) ([]models.Permissao, error) {
 	var permissoes []models.Permissao
 
-	tx := r.db.Find(&permissoes)
+	tx := r.db
+	if len(preloads) > 0 {
+		for _, preload := range preloads {
+			tx = tx.Preload(preload)
+		}
+	}
+
+	tx = tx.Find(&permissoes)
 	if tx.Error != nil {
 		return permissoes, tx.Error
 	}
@@ -75,5 +82,15 @@ func (r *permissaoRepositoryImpl) Update(permissao *models.Permissao, updateItem
 }
 
 func (r *permissaoRepositoryImpl) Delete(id uuid.UUID) error {
-	return r.db.Delete(&models.Permissao{}, "id = ?", id).Error
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("id_permissao = ?", id).Delete(&models.PermissaoUsuario{}).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Delete(&models.Permissao{}, "id = ?", id).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
