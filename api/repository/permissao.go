@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"api_pattern_go/api/global/enum"
 	"api_pattern_go/api/global/erros"
 	"api_pattern_go/api/models"
 	"github.com/google/uuid"
@@ -13,6 +14,7 @@ type PermissaoRepository interface {
 	Create(permissao *models.Permissao) error
 	Update(permissao *models.Permissao, updateItems map[string]interface{}) (*models.Permissao, error)
 	Delete(id uuid.UUID) error
+	GerenciaPermissoes() error
 }
 
 type permissaoRepositoryImpl struct {
@@ -93,4 +95,36 @@ func (r *permissaoRepositoryImpl) Delete(id uuid.UUID) error {
 
 		return nil
 	})
+}
+
+func (r *permissaoRepositoryImpl) GerenciaPermissoes() error {
+	var permissoes []models.Permissao
+
+	tx := r.db.Find(&permissoes)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	var permissoesFaltantes []models.Permissao
+	for _, p := range enum.ListaPermissoes {
+		faltante := true
+		for _, permissao := range permissoes {
+			if permissao.Nome == p {
+				faltante = false
+				break
+			}
+		}
+		if faltante {
+			permissoesFaltantes = append(permissoesFaltantes, models.Permissao{
+				Nome:      p,
+				Descricao: "Criado pelo sistema.",
+			})
+		}
+	}
+
+	if len(permissoesFaltantes) > 0 {
+		tx = tx.Create(&permissoesFaltantes)
+	}
+
+	return tx.Error
 }
