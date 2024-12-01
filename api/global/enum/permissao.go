@@ -1,5 +1,22 @@
 package enum
 
+var (
+	ListaPermissoes = []string{
+		PermissaoSistemaAdmin,
+
+		PermissaoPermissaoCriar,
+		PermissaoPermissaoVisualizar,
+		PermissaoPermissaoListar,
+		PermissaoPermissaoAtualizar,
+		PermissaoPermissaoDeletar,
+
+		PermissaoUsuarioVisualizar,
+		PermissaoUsuarioListar,
+		PermissaoUsuarioAtualizar,
+		PermissaoUsuarioDeletar,
+	}
+)
+
 const (
 	PermissaoSistemaAdmin = "SISTEMA_ADMIN"
 

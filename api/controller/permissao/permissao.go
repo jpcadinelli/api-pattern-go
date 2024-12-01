@@ -65,7 +65,7 @@ func Visualizar(ginctx *gin.Context) {
 		return
 	}
 
-	ginctx.JSON(http.StatusCreated, middleware.NewResponseBridge(nil, p))
+	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, p))
 }
 
 func Listar(ginctx *gin.Context) {
@@ -79,6 +79,14 @@ func Listar(ginctx *gin.Context) {
 		ginctx.JSON(http.StatusUnauthorized, middleware.NewResponseBridge(erros.ErrUsuarioNaoTemPermissao, nil))
 		return
 	}
+
+	permissoes, err := repository.NewPermissaoRepository(dbConetion.DB).FindAll()
+	if err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, permissoes))
 }
 
 func Atualizar(ginctx *gin.Context) {
@@ -145,5 +153,5 @@ func Deletar(ginctx *gin.Context) {
 		return
 	}
 
-	ginctx.JSON(http.StatusCreated, middleware.NewResponseBridge(nil, nil))
+	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, nil))
 }
