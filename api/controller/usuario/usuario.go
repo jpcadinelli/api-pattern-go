@@ -73,6 +73,19 @@ func Listar(ginctx *gin.Context) {
 		ginctx.JSON(http.StatusUnauthorized, middleware.NewResponseBridge(erros.ErrUsuarioNaoTemPermissao, nil))
 		return
 	}
+
+	usuarios, err := repository.NewUsuarioRepository(dbConetion.DB).FindAll("Permissoes")
+	if err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	response := []*models.UsuarioDTOResponse{}
+	for _, u := range usuarios {
+		response = append(response, u.UsuarioToDTOResponse())
+	}
+
+	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, response))
 }
 
 func Atualizar(ginctx *gin.Context) {
@@ -86,6 +99,40 @@ func Atualizar(ginctx *gin.Context) {
 		ginctx.JSON(http.StatusUnauthorized, middleware.NewResponseBridge(erros.ErrUsuarioNaoTemPermissao, nil))
 		return
 	}
+
+	var u models.Usuario
+
+	if err = ginctx.ShouldBindJSON(&u); err != nil {
+		ginctx.JSON(http.StatusBadRequest, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	if usuarioLogado.Id != u.Id {
+		ginctx.JSON(http.StatusBadRequest, middleware.NewResponseBridge(erros.ErrNaoPodeMudadarDadosDeOutroUsuario, nil))
+		return
+	}
+
+	uOld, err := repository.NewUsuarioRepository(dbConetion.DB).FindById(u.Id)
+	if err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	updateItems := map[string]interface{}{
+		"primeiro_nome": u.PrimeiroNome,
+		"ultimo_nome":   u.UltimoNome,
+		"email":         u.Email,
+		"password":      services.SHA256Encoder(u.Password),
+	}
+
+	uOld, err = repository.NewUsuarioRepository(dbConetion.DB).Update(uOld, updateItems)
+	if err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	reponse := uOld.UsuarioToDTOResponse()
+	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, reponse))
 }
 
 func Deletar(ginctx *gin.Context) {
@@ -99,4 +146,18 @@ func Deletar(ginctx *gin.Context) {
 		ginctx.JSON(http.StatusUnauthorized, middleware.NewResponseBridge(erros.ErrUsuarioNaoTemPermissao, nil))
 		return
 	}
+
+	idStr := ginctx.Param("id")
+	id, err := uuid.Parse(idStr)
+	if err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	if err = repository.NewUsuarioRepository(dbConetion.DB).Delete(id); err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, nil))
 }

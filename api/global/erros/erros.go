@@ -11,8 +11,9 @@ var (
 )
 
 var (
-	ErrUsuarioNaoEncontrado = fmt.Errorf("usuário não encontrado")
-	ErrCredenciaisInvalidas = fmt.Errorf("credenciais inválidas do usuário")
+	ErrUsuarioNaoEncontrado              = fmt.Errorf("usuário não encontrado")
+	ErrCredenciaisInvalidas              = fmt.Errorf("credenciais inválidas do usuário")
+	ErrNaoPodeMudadarDadosDeOutroUsuario = fmt.Errorf("seu usuário não tem permissão de mudar os dados de outro usuário")
 )
 
 var (

@@ -14,9 +14,9 @@ const (
 func SetupRoutes(router *gin.Engine) *gin.Engine {
 	main := router.Group("/api/v1")
 	{
-		userGroup := main.Group("/users")
+		usuarioGroup := main.Group("/usuarios")
 		{
-			userRoutes(userGroup)
+			usuarioRoutes(usuarioGroup)
 		}
 		testeGroup := main.Group("/testes", middleware.Auth())
 		{
