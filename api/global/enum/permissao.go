@@ -30,4 +30,7 @@ const (
 	PermissaoUsuarioListar     = "USUARIO_LISTAR"
 	PermissaoUsuarioAtualizar  = "USUARIO_ATUALIZAR"
 	PermissaoUsuarioDeletar    = "USUARIO_DELETAR"
+
+	PermissaoUsuarioAtribuirPermissao = "USUARIO_ATRIBUIR_PERMISSAO"
+	PermissaoUsuarioRemoverPermissao  = "USUARIO_REMOVER_PERMISSAO"
 )
