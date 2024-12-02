@@ -12,4 +12,7 @@ func usuarioRoutes(r *gin.RouterGroup) {
 	r.POST(routeFiltro, middleware.Auth(), usuario.Listar)
 	r.PUT(route, middleware.Auth(), usuario.Atualizar)
 	r.DELETE(routeId, middleware.Auth(), usuario.Deletar)
+
+	r.POST(routeId+"/permissao/:idPermissao", middleware.Auth(), usuario.AtribuirPermissao)
+	r.DELETE(routeId+"/permissao/:idPermissao", middleware.Auth(), usuario.RemoverPermissao)
 }

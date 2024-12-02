@@ -161,3 +161,72 @@ func Deletar(ginctx *gin.Context) {
 
 	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, nil))
 }
+
+func AtribuirPermissao(ginctx *gin.Context) {
+	usuarioLogado, err := service.GetUsuarioLogado(ginctx)
+	if err != nil {
+		ginctx.JSON(http.StatusBadRequest, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	if !service.VerificaPermissaoUsuario(*usuarioLogado, enum.PermissaoUsuarioAtribuirPermissao) {
+		ginctx.JSON(http.StatusUnauthorized, middleware.NewResponseBridge(erros.ErrUsuarioNaoTemPermissao, nil))
+		return
+	}
+
+	idStr := ginctx.Param("id")
+	id, err := uuid.Parse(idStr)
+	if err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	idPermissaoStr := ginctx.Param("idPermissao")
+	idPermissao, err := uuid.Parse(idPermissaoStr)
+	if err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	permissaoUsuario, err := repository.NewPermissaoUsuarioRepository(dbConetion.DB).FindRelations(id, idPermissao)
+	if err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, permissaoUsuario))
+}
+
+func RemoverPermissao(ginctx *gin.Context) {
+	usuarioLogado, err := service.GetUsuarioLogado(ginctx)
+	if err != nil {
+		ginctx.JSON(http.StatusBadRequest, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	if !service.VerificaPermissaoUsuario(*usuarioLogado, enum.PermissaoUsuarioRemoverPermissao) {
+		ginctx.JSON(http.StatusUnauthorized, middleware.NewResponseBridge(erros.ErrUsuarioNaoTemPermissao, nil))
+		return
+	}
+
+	idStr := ginctx.Param("id")
+	id, err := uuid.Parse(idStr)
+	if err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	idPermissaoStr := ginctx.Param("idPermissao")
+	idPermissao, err := uuid.Parse(idPermissaoStr)
+	if err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	if err = repository.NewPermissaoUsuarioRepository(dbConetion.DB).Delete(id, idPermissao); err != nil {
+		ginctx.JSON(http.StatusInternalServerError, middleware.NewResponseBridge(err, nil))
+		return
+	}
+
+	ginctx.JSON(http.StatusOK, middleware.NewResponseBridge(nil, nil))
+}
