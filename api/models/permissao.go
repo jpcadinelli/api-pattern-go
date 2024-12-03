@@ -12,13 +12,20 @@ type Permissao struct {
 	Descricao string    `json:"descricao"`
 }
 
-func (u *Permissao) BeforeCreate(_ *gorm.DB) (err error) {
-	u.Id = uuid.New()
+func (p *Permissao) BeforeCreate(_ *gorm.DB) (err error) {
+	p.Id = uuid.New()
 	return err
 }
 
 func (Permissao) TableName() string {
 	return global.TablePermissao
+}
+
+func (p *Permissao) PermissaoToDropdownUUID() *DropdownUUID {
+	return &DropdownUUID{
+		Label: p.Nome,
+		Value: p.Id,
+	}
 }
 
 type PermissaoUsuario struct {
@@ -27,8 +34,8 @@ type PermissaoUsuario struct {
 	IdUsuario   uuid.UUID `json:"idUsuario" gorm:"column:id_usuario"`
 }
 
-func (u *PermissaoUsuario) BeforeCreate(_ *gorm.DB) (err error) {
-	u.Id = uuid.New()
+func (pu *PermissaoUsuario) BeforeCreate(_ *gorm.DB) (err error) {
+	pu.Id = uuid.New()
 	return err
 }
 

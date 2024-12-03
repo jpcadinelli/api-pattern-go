@@ -2,6 +2,7 @@ package models
 
 import (
 	"api_pattern_go/api/global"
+	"fmt"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"time"
@@ -50,5 +51,11 @@ func (u *Usuario) UsuarioToDTOResponse() *UsuarioDTOResponse {
 		DataNascimento: u.DataNascimento,
 		Permissoes:     u.Permissoes,
 		CreatedAt:      u.CreatedAt,
+	}
+}
+func (u *Usuario) UsuarioToDropdownUUID() *DropdownUUID {
+	return &DropdownUUID{
+		Label: fmt.Sprintf("%v %v (%v)", u.PrimeiroNome, u.UltimoNome, u.Email),
+		Value: u.Id,
 	}
 }

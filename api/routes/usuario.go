@@ -9,7 +9,8 @@ import (
 func usuarioRoutes(r *gin.RouterGroup) {
 	r.POST(route, usuario.Criar)
 	r.GET(routeId, middleware.Auth(), usuario.Visualizar)
-	r.POST(routeFiltro, middleware.Auth(), usuario.Listar)
+	r.GET(route, middleware.Auth(), usuario.Listar)
+	r.GET(routeDropdown, middleware.Auth(), usuario.Dropdown)
 	r.PUT(route, middleware.Auth(), usuario.Atualizar)
 	r.DELETE(routeId, middleware.Auth(), usuario.Deletar)
 

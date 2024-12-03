@@ -8,7 +8,8 @@ import (
 func permissaoRoutes(r *gin.RouterGroup) {
 	r.POST(route, permissao.Criar)
 	r.GET(routeId, permissao.Visualizar)
-	r.POST(routeFiltro, permissao.Listar)
+	r.GET(route, permissao.Listar)
+	r.GET(routeDropdown, permissao.Dropdown)
 	r.PUT(route, permissao.Atualizar)
 	r.DELETE(routeId, permissao.Deletar)
 }
