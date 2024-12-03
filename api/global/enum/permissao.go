@@ -7,6 +7,7 @@ var (
 		PermissaoPermissaoCriar,
 		PermissaoPermissaoVisualizar,
 		PermissaoPermissaoListar,
+		PermissaoPermissaoDropdown,
 		PermissaoPermissaoAtualizar,
 		PermissaoPermissaoDeletar,
 
@@ -27,6 +28,7 @@ const (
 	PermissaoPermissaoCriar      = "PERMISSAO_CRIAR"
 	PermissaoPermissaoVisualizar = "PERMISSAO_VISUALIZAR"
 	PermissaoPermissaoListar     = "PERMISSAO_LISTAR"
+	PermissaoPermissaoDropdown   = "PERMISSAO_DROPDOWN"
 	PermissaoPermissaoAtualizar  = "PERMISSAO_ATUALIZAR"
 	PermissaoPermissaoDeletar    = "PERMISSAO_DELETAR"
 
