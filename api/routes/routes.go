@@ -6,9 +6,10 @@ import (
 )
 
 const (
-	route       = "/"
-	routeId     = "/:id"
-	routeFiltro = "/filtro"
+	route         = "/"
+	routeId       = "/:id"
+	routeFiltro   = "/filtro"
+	routeDropdown = "/dropdown"
 )
 
 func SetupRoutes(router *gin.Engine) *gin.Engine {
