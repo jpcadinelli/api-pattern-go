@@ -17,7 +17,7 @@ func (p *Permissao) BeforeCreate(_ *gorm.DB) (err error) {
 	return err
 }
 
-func (Permissao) TableName() string {
+func (p *Permissao) TableName() string {
 	return global.TablePermissao
 }
 
@@ -39,6 +39,6 @@ func (pu *PermissaoUsuario) BeforeCreate(_ *gorm.DB) (err error) {
 	return err
 }
 
-func (PermissaoUsuario) TableName() string {
+func (pu *PermissaoUsuario) TableName() string {
 	return global.TablePermissaoUsuario
 }

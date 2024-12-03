@@ -26,7 +26,7 @@ func (u *Usuario) BeforeCreate(_ *gorm.DB) (err error) {
 	return err
 }
 
-func (Usuario) TableName() string {
+func (u *Usuario) TableName() string {
 	return global.TableUsuario
 }
 
