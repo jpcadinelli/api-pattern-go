@@ -19,10 +19,6 @@ func SetupRoutes(router *gin.Engine) *gin.Engine {
 		{
 			usuarioRoutes(usuarioGroup)
 		}
-		testeGroup := main.Group("/testes", middleware.Auth())
-		{
-			testeRoutes(testeGroup)
-		}
 		loginGroup := main.Group("/login")
 		{
 			loginRoutes(loginGroup)
