@@ -1,12 +1,3 @@
-CREATE TABLE teste (
-    id uuid NOT NULL,
-    nome text NOT NULL,
-    CONSTRAINT pk_teste PRIMARY KEY (id)
-);
-
-COMMENT ON COLUMN teste.id IS 'Identificador único da tabela teste';
-COMMENT ON COLUMN teste.nome IS 'Nome associado à tabela teste';
-
 CREATE TABLE usuario (
     id UUID NOT NULL,
     primeiro_nome TEXT NOT NULL,
